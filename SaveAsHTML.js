@@ -1,21 +1,22 @@
+#!/usr/bin/env node
+
 //@TODO: parametrize everything through the CLI interface.
 
 var page = require('webpage').create();
-page.onConsoleMessage = function (msg) { console.log(msg); };
+page.onConsoleMessage = function (msg) { console.error(msg); };
 
 var system = require('system');
 var address, output, size;
 
 
-if (system.args.length!=3)
+if (system.args.length!=2)
 {
-    console.log('Usage: phantomjs SaveAsHTML.js URL filename');
+    console.error('Usage: phantomjs SaveAsHTML.js URL > filename');
     phantom.exit(1);
 }
 else
 {
     address = system.args[1];
-    output = system.args[2];
 	
     page.viewportSize = {	
 		width: 1680, 
@@ -34,7 +35,7 @@ else
 	page.open(address, function (status){
         if (status!=='success')
 		{
-			console.log("Unable to load URL, returned status: "+status);
+			console.error("Unable to load URL, returned status: "+status);
 			phantom.exit(1);
 		}
 		else
@@ -212,7 +213,7 @@ else
 					}
 				});
 				
-				require("fs").write(output, page.content, "w");
+				console.log(page.content);
 				
 				phantom.exit();
             }, 7000);
